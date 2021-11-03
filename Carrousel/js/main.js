@@ -11,7 +11,6 @@ const btnNext = document.querySelector("#slider-next");
 const btnPrev = document.querySelector("#slider-previous");
 const btnrandom = document.querySelector("#slider-random");
 TOOLBAR.addEventListener("click", togglePlay);
-let currentPhoto = null;
 
 // TABLEAU --------------------------------------------------------------------------
 const PHOTOS = [
