@@ -4,6 +4,7 @@ let BTNTHRASH;
 let form;
 let detail = new Array();
 let aside;
+let baliseEditer;
 
 //FONCTION
 
@@ -16,9 +17,18 @@ function showform() {
 }
 
 function showDetails() {
-  detail.push(aside.insertAdjacentHTML("beforeend", `${this.dataset.index}`));
+  //normalement ici je push dans le tableau mais je suis pas très sur lol .
+  detail.push(this.dataset.index);
+  //et là j'essaie d'afficher par le moyen du saint esprit I GUESS
+
+  aside.insertAdjacentHTML("beforeend", ``);
+
+  baliseEditer.setAttribute("data-index", this.dataset.index);
+  console.log(baliseEditer);
   console.log(this.dataset.index);
 }
+
+console.log(detail.length);
 
 function showTask() {
   let task = document.querySelector("#todo");
@@ -83,6 +93,10 @@ document.addEventListener("DOMContentLoaded", function () {
   aside = document.querySelector("aside");
   BTNPLUS = document.querySelector("#task-form");
   BTNTHRASH = document.querySelector("#clear-todo");
+
+  //cible le a du aside afin d'ajouter un attrubut data-index dans la balise
+  baliseEditer = document.querySelector("aside a");
+
   form = document.querySelector("form");
   BTNTHRASH.addEventListener("click", resetForm);
 
