@@ -56,7 +56,7 @@ function exportHTML() {
 function generateHTML() {
   const ID = this.id;
   if (ID == "hr") {
-    content.insertAdjacentHTML("beforeen", `<hr>`);
+    content.insertAdjacentHTML("beforeend", `<hr>`);
   } else {
     content.insertAdjacentHTML(
       "beforeend",

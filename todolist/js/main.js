@@ -2,9 +2,10 @@
 let BTNPLUS;
 let BTNTHRASH;
 let form;
-let detail = new Array();
 let aside;
 let baliseEditer;
+let asideH3;
+let asideP;
 
 //FONCTION
 
@@ -17,24 +18,36 @@ function showform() {
 }
 
 function showDetails() {
-  //normalement ici je push dans le tableau mais je suis pas très sur lol .
-  detail.push(this.dataset.index);
-  //et là j'essaie d'afficher par le moyen du saint esprit I GUESS
+  //variable qui contient le data ta compris maggle
+  let detail = loadDatas();
 
-  aside.insertAdjacentHTML("beforeend", ``);
+  asideH3.innerHTML += `${detail[this.dataset.index].name} <br>`;
+  asideP.innerHTML += `${detail[this.dataset.index].description} <br>`;
 
+  console.log(detail);
+  //Ici on attribut l'index du tableau au lien "editer" hallelujah.
   baliseEditer.setAttribute("data-index", this.dataset.index);
+  baliseEditer.addEventListener("click", function () {
+    form.setAttribute("data-mode", "edit");
+    form.classList.remove("hide");
+  });
   console.log(baliseEditer);
   console.log(this.dataset.index);
 }
 
-console.log(detail.length);
+function loadDatas() {
+  //tableau qui  contient toutes les tâches en JSON (qui se trouve dans le local storage)
+  let list = localStorage.getItem("todolist");
+  //tranfrome le JSON en objet complexe manipulable
+  list = JSON.parse(list);
+  if (list == null) list = [];
+  return list;
+}
 
 function showTask() {
   let task = document.querySelector("#todo");
   let todo = JSON.parse(localStorage.getItem("todolist"));
   let ul = document.createElement("ul");
-
   todo.forEach((todoEl, index) => {
     let li = document.createElement("li");
     li.setAttribute("data-index", index);
@@ -46,8 +59,6 @@ function showTask() {
   task.innerHTML = "";
   task.appendChild(ul);
   console.log(todo);
-
-  //CORRECTION
 }
 
 // afficher les details. Cibler les li
@@ -66,7 +77,7 @@ function showTask() {
 
 function saveTask(event) {
   event.preventDefault();
-  let list = JSON.parse(localStorage.getItem("todolist"));
+  let list = loadDatas();
   if (list == null) list = [];
   //objet qui contient et reccup les valeur
   let task = new Object();
@@ -90,9 +101,13 @@ function saveTask(event) {
 // CODE PRINCIPAL
 
 document.addEventListener("DOMContentLoaded", function () {
+  //recuperation d'element
   aside = document.querySelector("aside");
   BTNPLUS = document.querySelector("#task-form");
   BTNTHRASH = document.querySelector("#clear-todo");
+  // Partie afficher task et Editer
+  asideH3 = document.querySelector("aside h3");
+  asideP = document.querySelector("aside p");
 
   //cible le a du aside afin d'ajouter un attrubut data-index dans la balise
   baliseEditer = document.querySelector("aside a");
