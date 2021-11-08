@@ -21,24 +21,27 @@ function showform() {
 function showDetails() {
   //variable qui contient le data ta compris maggle
   let detail = loadDatas();
+  let task_lvl = document.querySelector("#lvl");
+  asideH3.innerHTML += `${detail[this.dataset.index].name} <br>`;
+  asideP.innerHTML += `${detail[this.dataset.index].description} <br>`;
+
   //Ici on attribut l'index du tableau au lien "editer" hallelujah.
   baliseEditer.setAttribute("data-index", this.dataset.index);
-  baliseEditer.addEventListener("click", function () {
-    form.setAttribute("data-mode", "edit");
-    form.classList.remove("hide");
-
-    //  METTRE EN LIEN L INDEX AVEC L AFFICHAGE
-
-    // detail.forEach((elem) => {
-
-    // });
-  });
 
   // baliseEditer.addEventListener("click", loadDatas(this.dataset.index));
   console.log(baliseEditer);
   console.log(this.dataset.index);
+  editer();
 }
 
+function editer() {
+  let list = loadDatas();
+  let name = document.querySelector("#name input");
+  baliseEditer.addEventListener("click", function () {
+    form.setAttribute("data-mode", "edit");
+    form.classList.remove("hide");
+  });
+}
 function loadDatas() {
   //tableau qui  contient toutes les tâches en JSON (qui se trouve dans le local storage)
   let list = localStorage.getItem("todolist");
