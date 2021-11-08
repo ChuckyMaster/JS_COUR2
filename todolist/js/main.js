@@ -6,7 +6,7 @@ let aside;
 let baliseEditer;
 let asideH3;
 let asideP;
-
+let task_lvl;
 //FONCTION
 
 function resetForm() {
@@ -21,9 +21,10 @@ function showform() {
 function showDetails() {
   //variable qui contient le data ta compris maggle
   let detail = loadDatas();
-  let task_lvl = document.querySelector("#lvl");
-  asideH3.innerHTML += `${detail[this.dataset.index].name} <br>`;
-  asideP.innerHTML += `${detail[this.dataset.index].description} <br>`;
+
+  asideH3.innerHTML = `${detail[this.dataset.index].name}`;
+  asideP.innerHTML = `${detail[this.dataset.index].description}`;
+  task_lvl.innerHTML = `${detail[this.dataset.index].lvl}`;
 
   //Ici on attribut l'index du tableau au lien "editer" hallelujah.
   baliseEditer.setAttribute("data-index", this.dataset.index);
@@ -31,16 +32,14 @@ function showDetails() {
   // baliseEditer.addEventListener("click", loadDatas(this.dataset.index));
   console.log(baliseEditer);
   console.log(this.dataset.index);
-  editer();
 }
 
 function editer() {
-  let list = loadDatas();
-  let name = document.querySelector("#name input");
-  baliseEditer.addEventListener("click", function () {
-    form.setAttribute("data-mode", "edit");
-    form.classList.remove("hide");
-  });
+  document.getElementById("name").value = asideH3.innerHTML;
+  document.getElementById("description").value = asideP.innerHTML;
+  task_lvl.value = task_lvl.innerHTML;
+  form.setAttribute("data-mode", "edit");
+  form.classList.remove("hide");
 }
 function loadDatas() {
   //tableau qui  contient toutes les tâches en JSON (qui se trouve dans le local storage)
@@ -67,14 +66,6 @@ function showTask() {
   task.appendChild(ul);
   console.log(todo);
 }
-
-// afficher les details. Cibler les li
-
-// function loadDatas() {
-//   let list = JSON.parse(localStorage.getItem("todolist"));
-//   if (list == null) list = [];
-//   return list;
-// }
 
 /**
  *
@@ -105,25 +96,35 @@ function saveTask(event) {
   form.reset();
 }
 
-// CODE PRINCIPAL
+/*********************************
+ *************CODE PRINCIPAL**************
+ *********************************
+ */
 
 document.addEventListener("DOMContentLoaded", function () {
   //recuperation d'element
   aside = document.querySelector("aside");
   BTNPLUS = document.querySelector("#task-form");
   BTNTHRASH = document.querySelector("#clear-todo");
+
   // Partie afficher task et Editer
+  task_lvl = document.querySelector("#lvl");
   asideH3 = document.querySelector("aside h3");
   asideP = document.querySelector("aside p");
+  form = document.querySelector("form");
 
   //cible le a du aside afin d'ajouter un attrubut data-index dans la balise
   baliseEditer = document.querySelector("aside a");
 
-  form = document.querySelector("form");
-  BTNTHRASH.addEventListener("click", resetForm);
+  /*********************************
+   *************EVENT**************
+   *********************************
+   */
 
+  BTNTHRASH.addEventListener("click", resetForm);
   document.querySelector("#add-task").addEventListener("click", showform);
   document.querySelector("#task-form").addEventListener("submit", saveTask);
+  baliseEditer.addEventListener("click", editer);
 
   showTask();
 });
