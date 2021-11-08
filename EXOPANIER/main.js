@@ -24,6 +24,10 @@ let basket = [
     name: "prune",
     quantity: 4,
   },
+  {
+    name: "connard",
+    quantity: 1000,
+  },
 ];
 
 /***********************************
@@ -31,54 +35,80 @@ let basket = [
  ************************************/
 
 function AddToBasket() {
+  //attribut des valeur sur le tableau
   let prod = produit.value;
   let quant = number.value;
+
+  basket.forEach((ligne) => {
+    if (prod == basket.name) {
+      console.log("connard");
+    }
+  });
 
   basket.push({
     name: prod,
     quantity: quant,
   });
+
   displayBasket();
   console.log("HI");
+
+  form.reset();
 }
 
 function displayBasket() {
   let ul = document.createElement("ul");
   let basketList = document.querySelector("#basket");
+
+  // creer l'index qui va être dans chaque ligne
   let index = 0;
 
   //BOUCLE
   basket.forEach((elem) => {
+    //creer les balises
     let li = document.createElement("li");
     const button = document.createElement("button");
+    button.classList.add("remove");
+    //creer le <i> pour l'icone
     const i = document.createElement("i");
-
-    //buttonTrash.innerHTML = '';
-
+    //afficher les elements dans la liste / ajouter chaque ligne
     li.innerHTML = `${elem.quantity} ${elem.name}(s) `;
     i.innerHTML = ` <i data-index=${index} class="fas fa-trash "></i> `;
 
+    //ajouter les button dans chaque liste ( dans chaque button est creer une icone)
     li.appendChild(button);
     button.appendChild(i);
-    // li.appendChild(buttonTrash);
     ul.appendChild(li);
     index++;
   });
-
-  btnTrash = document.querySelectorAll(".fa-trash");
-
-  btn;
-
   basketList.innerHTML = "";
   basketList.appendChild(ul);
-  console.log("displaybasket func");
+
+  // variable qui stock le selector du "button" .remove ( contient toutes les balises des boutons)
+  let remove = document.querySelectorAll(".remove");
+
+  //On boucle sur les boutons afin de rajouter un event click sur chacun d'entre eux
+  remove.forEach((elem) => {
+    elem.addEventListener("click", deleteOne);
+  });
 }
 
-function deletOne() {
-  basket.splice(this.dataset.index, 1);
-
-  console.log("Yo");
+function deleteOne(e) {
+  basket.splice(e.target.dataset.index, 1);
+  displayBasket();
 }
+
+// function antiDoublon(produit) {
+//   let doublon = false;
+//   basket.forEach((ligne, index) => {
+//     if (ligne.name == produit.name) {
+//       basket[index].quantity =
+//         parseInt(ligne.quantity) + parseInt(produit.quantity);
+//       doublon = true;
+//     }
+//   });
+//   return doublon;
+// }
 
 document.addEventListener("DOMContentLoaded", function () {
   /***********************************
