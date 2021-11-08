@@ -11,6 +11,7 @@ let asideP;
 
 function resetForm() {
   localStorage.clear();
+  showTask();
 }
 
 function showform() {
@@ -20,17 +21,20 @@ function showform() {
 function showDetails() {
   //variable qui contient le data ta compris maggle
   let detail = loadDatas();
-
-  asideH3.innerHTML += `${detail[this.dataset.index].name} <br>`;
-  asideP.innerHTML += `${detail[this.dataset.index].description} <br>`;
-
-  console.log(detail);
   //Ici on attribut l'index du tableau au lien "editer" hallelujah.
   baliseEditer.setAttribute("data-index", this.dataset.index);
   baliseEditer.addEventListener("click", function () {
     form.setAttribute("data-mode", "edit");
     form.classList.remove("hide");
+
+    //  METTRE EN LIEN L INDEX AVEC L AFFICHAGE
+
+    // detail.forEach((elem) => {
+
+    // });
   });
+
+  // baliseEditer.addEventListener("click", loadDatas(this.dataset.index));
   console.log(baliseEditer);
   console.log(this.dataset.index);
 }
@@ -46,7 +50,7 @@ function loadDatas() {
 
 function showTask() {
   let task = document.querySelector("#todo");
-  let todo = JSON.parse(localStorage.getItem("todolist"));
+  let todo = loadDatas();
   let ul = document.createElement("ul");
   todo.forEach((todoEl, index) => {
     let li = document.createElement("li");
