@@ -9,7 +9,7 @@ let form;
 let add;
 let produit;
 let quantity;
-let basketList;
+let basketbasket;
 let btnTrash;
 let basket = [
   {
@@ -38,13 +38,6 @@ function AddToBasket() {
   //attribut des valeur sur le tableau
   let prod = produit.value;
   let quant = number.value;
-
-  basket.forEach((ligne) => {
-    if (prod == basket.name) {
-      console.log("connard");
-    }
-  });
-
   basket.push({
     name: prod,
     quantity: quant,
@@ -56,9 +49,34 @@ function AddToBasket() {
   form.reset();
 }
 
+function recup() {
+  let panier = new Object();
+
+  //Récupérer la valeur dans l'input name et le stock dans la ligne name de notre objet panier
+  panier.name = document.querySelector("#produits").value;
+  panier.quantity = document.querySelector("#number").value;
+  let doublon = isDoublon(panier);
+  if (doublon == false) {
+    basket.push(panier);
+  }
+  displayBasket();
+}
+
+function isDoublon(produit) {
+  let doublon = false;
+  basket.forEach((ligne, index) => {
+    if (ligne.name == produit.name) {
+      basket[index].quantity =
+        parseInt(ligne.quantity) + parseInt(produit.quantity);
+      doublon = true;
+    }
+  });
+  return doublon;
+}
+
 function displayBasket() {
   let ul = document.createElement("ul");
-  let basketList = document.querySelector("#basket");
+  let basketbasket = document.querySelector("#basket");
 
   // creer l'index qui va être dans chaque ligne
   let index = 0;
@@ -71,18 +89,18 @@ function displayBasket() {
     button.classList.add("remove");
     //creer le <i> pour l'icone
     const i = document.createElement("i");
-    //afficher les elements dans la liste / ajouter chaque ligne
+    //afficher les elements dans la baskete / ajouter chaque ligne
     li.innerHTML = `${elem.quantity} ${elem.name}(s) `;
     i.innerHTML = ` <i data-index=${index} class="fas fa-trash "></i> `;
 
-    //ajouter les button dans chaque liste ( dans chaque button est creer une icone)
+    //ajouter les button dans chaque baskete ( dans chaque button est creer une icone)
     li.appendChild(button);
     button.appendChild(i);
     ul.appendChild(li);
     index++;
   });
-  basketList.innerHTML = "";
-  basketList.appendChild(ul);
+  basketbasket.innerHTML = "";
+  basketbasket.appendChild(ul);
 
   // variable qui stock le selector du "button" .remove ( contient toutes les balises des boutons)
   let remove = document.querySelectorAll(".remove");
@@ -97,18 +115,6 @@ function deleteOne(e) {
   basket.splice(e.target.dataset.index, 1);
   displayBasket();
 }
-
-// function antiDoublon(produit) {
-//   let doublon = false;
-//   basket.forEach((ligne, index) => {
-//     if (ligne.name == produit.name) {
-//       basket[index].quantity =
-//         parseInt(ligne.quantity) + parseInt(produit.quantity);
-//       doublon = true;
-//     }
-//   });
-//   return doublon;
-// }
 
 document.addEventListener("DOMContentLoaded", function () {
   /***********************************
@@ -127,5 +133,5 @@ document.addEventListener("DOMContentLoaded", function () {
     e.preventDefault();
     return;
   });
-  add.addEventListener("click", AddToBasket);
+  add.addEventListener("click", recup);
 });
