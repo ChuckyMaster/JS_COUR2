@@ -9,7 +9,7 @@ let form;
 let add;
 let produit;
 let quantity;
-let basketList;
+let basketbasket;
 let btnTrash;
 let basket = [
   {
@@ -24,6 +24,10 @@ let basket = [
     name: "prune",
     quantity: 4,
   },
+  {
+    name: "connard",
+    quantity: 1000,
+  },
 ];
 
 /***********************************
@@ -31,53 +35,85 @@ let basket = [
  ************************************/
 
 function AddToBasket() {
+  //attribut des valeur sur le tableau
   let prod = produit.value;
   let quant = number.value;
-
   basket.push({
     name: prod,
     quantity: quant,
   });
+
   displayBasket();
   console.log("HI");
+
+  form.reset();
+}
+
+function recup() {
+  let panier = new Object();
+
+  //Récupérer la valeur dans l'input name et le stock dans la ligne name de notre objet panier
+  panier.name = document.querySelector("#produits").value;
+  panier.quantity = document.querySelector("#number").value;
+  let doublon = isDoublon(panier);
+  if (doublon == false) {
+    basket.push(panier);
+  }
+  displayBasket();
+}
+
+function isDoublon(produit) {
+  let doublon = false;
+  basket.forEach((ligne, index) => {
+    if (ligne.name == produit.name) {
+      basket[index].quantity =
+        parseInt(ligne.quantity) + parseInt(produit.quantity);
+      doublon = true;
+    }
+  });
+  return doublon;
 }
 
 function displayBasket() {
   let ul = document.createElement("ul");
-  let basketList = document.querySelector("#basket");
+  let basketbasket = document.querySelector("#basket");
+
+  // creer l'index qui va être dans chaque ligne
   let index = 0;
 
   //BOUCLE
   basket.forEach((elem) => {
+    //creer les balises
     let li = document.createElement("li");
     const button = document.createElement("button");
+    button.classList.add("remove");
+    //creer le <i> pour l'icone
     const i = document.createElement("i");
-
-    //buttonTrash.innerHTML = '';
-
+    //afficher les elements dans la baskete / ajouter chaque ligne
     li.innerHTML = `${elem.quantity} ${elem.name}(s) `;
     i.innerHTML = ` <i data-index=${index} class="fas fa-trash "></i> `;
 
+    //ajouter les button dans chaque baskete ( dans chaque button est creer une icone)
     li.appendChild(button);
     button.appendChild(i);
-    // li.appendChild(buttonTrash);
     ul.appendChild(li);
     index++;
   });
+  basketbasket.innerHTML = "";
+  basketbasket.appendChild(ul);
 
-  btnTrash = document.querySelectorAll(".fa-trash");
+  // variable qui stock le selector du "button" .remove ( contient toutes les balises des boutons)
+  let remove = document.querySelectorAll(".remove");
 
-  btn;
-
-  basketList.innerHTML = "";
-  basketList.appendChild(ul);
-  console.log("displaybasket func");
+  //On boucle sur les boutons afin de rajouter un event click sur chacun d'entre eux
+  remove.forEach((elem) => {
+    elem.addEventListener("click", deleteOne);
+  });
 }
 
-function deletOne() {
-  basket.splice(this.dataset.index, 1);
-
-  console.log("Yo");
+function deleteOne(e) {
+  basket.splice(e.target.dataset.index, 1);
+  displayBasket();
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -97,5 +133,5 @@ document.addEventListener("DOMContentLoaded", function () {
     e.preventDefault();
     return;
   });
-  add.addEventListener("click", AddToBasket);
+  add.addEventListener("click", recup);
 });
